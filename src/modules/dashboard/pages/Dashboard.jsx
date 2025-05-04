@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { getToken } from '../../../shared/authorization.service';
+import { getP } from '../../../core/services/playslistTest.service';
 
 export const DashboardPage = () =>{
 
-  const [token, setToken] = useState(null); 
+  const [data, setData] = useState(null); 
   const [error, setError] = useState(null); 
 
   useEffect(() => {
-    getToken()
+    getP("sr.tobon")
       .then(response => {
-        console.log('Token obtenido:', response.data);
-        setToken(response.data);
+        console.log('Token obtenido:', response);
+        setData(response);
       })
       .catch(error => {
         console.error('Error obteniendo el token:', error);
@@ -23,7 +23,7 @@ export const DashboardPage = () =>{
       <header className="App-header">
       <h1>Prueba de token</h1>
       {error && <p>Error: {error.message}</p>}
-      {token && <p>Token obtenido con éxito: {token.access_token}</p>}
+      {data && <p>Data obtenido con éxito: {data}</p>}
       </header>
     </div>
   );

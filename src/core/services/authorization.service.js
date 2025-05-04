@@ -17,14 +17,3 @@ export const getToken = () => {
         },
       });
 };
-
-export const getP = () => {
-    const data = new URLSearchParams();
-    data.append('grant_type', 'client_credentials');
-
-    return axios.post(`${BASE_URL}/token`, data, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-};
