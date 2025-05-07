@@ -1,18 +1,15 @@
 import axios from 'axios';
 import { getHeaders } from '../../shared/getHeaders';
 
-const BASE_URL = process.env.REACT_APP_URL_ACCOUNT;
+const BASE_URL = process.env.REACT_APP_URL_BASE;
 
-export const getP = (userId) => {
+export const getPlay = () => {
     const token = getHeaders();
-
-    const data = new URLSearchParams();
-    data.append('grant_type', 'client_credentials');
-
-    return axios.post(`${BASE_URL}/artists/4Z8W4fKeB5YxbusRsdQVPb`, data, {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Bearer ${token.access_token}`
-          },
-      });
-};
+    console.log('Token en getPlay:', token);
+    console.log('URL:', `${BASE_URL}/artists/4Z8W4fKeB5YxbusRsdQVPb`);
+    return axios.get(`${BASE_URL}/artists/4Z8W4fKeB5YxbusRsdQVPb`, {
+      headers: {
+        'Authorization': `Bearer ${token.access_token}`,
+      }
+    });
+  };

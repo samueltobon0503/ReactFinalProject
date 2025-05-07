@@ -2,7 +2,7 @@ import { useContext, useState } from "react"
 import { UserContext } from "../contexts/User.Context";
 import { useNavigate } from "react-router";
 import { useForm } from "../../../hooks/useForm";
-
+import { Button } from 'primereact/button'; 
 
 const initialForm = {
   email: "",
@@ -85,8 +85,9 @@ export const Loginpage = () => {
                   className="btn btn-primary btn-lg btn-block"
                   onClick={onLoginGoogleUser}
                 >
-                  Login
+                  Login con Google
                 </button>
+                <Button label="Check" />
               </div>
 
               {error && (
