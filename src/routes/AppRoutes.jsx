@@ -5,6 +5,7 @@ import { DashboardPage } from '../modules/dashboard/pages/Dashboard';
 import { Loginpage } from '../modules/auth/pages/LoginPage';
 import { UserContext } from '../modules/auth/contexts/User.Context';
 import { Menu } from '../UI/components/layout/menubar';
+import { UserProfile } from '../modules/profile/pages/user-profile';
 
 export const AppRoutes = () => {
   const { userState: { logged } } = useContext(UserContext);
@@ -22,7 +23,8 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Loginpage />} />
       <Route element={<Menu />}>
-      <Route path="/Dashboard" element={<DashboardPage />} />
+        <Route path="/Dashboard" element={<DashboardPage />} />
+        <Route path="/Profile" element={<UserProfile />} />
       </Route>
       <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
