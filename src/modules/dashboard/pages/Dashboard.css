@@ -1,0 +1,17 @@
+/* Estado apagado: negro con borde verde */
+.p-togglebutton {
+  background-color: #000 !important;
+  border: 2px solid #fcfcfc !important;
+  color: #fff !important;
+}
+
+/* Estado activado: verde con borde blanco */
+.p-togglebutton.p-highlight {
+  background-color: #fd0000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+.p-togglebutton {
+  transition: all 0.3s ease;
+}

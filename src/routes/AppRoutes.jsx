@@ -6,11 +6,15 @@ import { Loginpage } from '../modules/auth/pages/LoginPage';
 import { UserContext } from '../modules/auth/contexts/User.Context';
 import { Menu } from '../UI/components/layout/menubar';
 import { UserProfile } from '../modules/profile/pages/user-profile';
+
 import { NoSpotifyAuth } from '../modules/dashboard/pages/NoSpotifyAuth';
 import Register from '../modules/register/pages/Register';
 
 
 
+
+
+import { Detail, DetailList } from '../modules/DetailList/Detail';
 
 export const AppRoutes = () => {
   const { userState: { logged } } = useContext(UserContext);
@@ -32,6 +36,7 @@ export const AppRoutes = () => {
       <Route element={<Menu />}>
         <Route path="/Dashboard" element={<DashboardPage />} />
         <Route path="/Profile" element={<UserProfile />} />
+        <Route path="/Detail/:id" element={<DetailList />} />
       </Route>
       <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
