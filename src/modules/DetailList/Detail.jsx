@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 const mockPlaylists = {
   "chill-vibes": {
     title: "Chill Vibes",
@@ -22,6 +22,7 @@ const mockPlaylists = {
 export const DetailList = () => {
   const { id } = useParams();
   const playlist = mockPlaylists[id];
+  const navigate = useNavigate();
 
   if (!playlist) {
     return <h2 className="text-white p-5">Playlist no encontrada</h2>;
@@ -29,6 +30,12 @@ export const DetailList = () => {
 
   return (
     <div className="container py-5 text-white">
+        <button
+        onClick={() => navigate("/Dashboard")}
+        className="btn btn-outline-light mb-4"
+      >
+        ← Volver al inicio
+      </button>
       <h2 className="mb-4">{playlist.title}</h2>
       <img
         src={playlist.image}
