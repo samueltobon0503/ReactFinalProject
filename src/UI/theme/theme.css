@@ -2194,6 +2194,7 @@
     display: inline-flex;
     user-select: none;
     vertical-align: bottom;
+    color: #1DB954 ;
   }
   .p-togglebutton-input {
     cursor: pointer;
@@ -2213,7 +2214,7 @@
     opacity: 0;
     z-index: 1;
     outline: 0 none;
-    border: 1px solid #d1d5db;
+    border: 3px solid #1DB954;
     border-radius: 6px;
   }
   .p-togglebutton .p-button {
@@ -2228,13 +2229,13 @@
     color: #6b7280;
   }
   .p-togglebutton.p-highlight .p-button {
-    background: #06b6d4;
-    border-color: #06b6d4;
-    color: #ffffff;
+    background-color: #121212 !important;
+    border: 3px solid #fff !important;
+    color: #1DB954 !important;
   }
   .p-togglebutton.p-highlight .p-button .p-button-icon-left,
   .p-togglebutton.p-highlight .p-button .p-button-icon-right {
-    color: #ffffff;
+    color: #1DB954;
   }
   .p-togglebutton:not(.p-disabled):has(.p-togglebutton-input:hover):not(.p-highlight) .p-button {
     background: #f3f4f6;
@@ -2243,7 +2244,7 @@
   }
   .p-togglebutton:not(.p-disabled):has(.p-togglebutton-input:hover):not(.p-highlight) .p-button .p-button-icon-left,
   .p-togglebutton:not(.p-disabled):has(.p-togglebutton-input:hover):not(.p-highlight) .p-button .p-button-icon-right {
-    color: #374151;
+    color: #1DB954;
   }
   .p-togglebutton:not(.p-disabled):has(.p-togglebutton-input:hover).p-highlight .p-button {
     background: #0891b2;
