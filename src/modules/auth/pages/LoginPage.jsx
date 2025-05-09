@@ -3,6 +3,7 @@ import { UserContext } from "../contexts/User.Context";
 import { useNavigate } from "react-router";
 import { useForm } from "../../../hooks/useForm";
 import { Button } from 'primereact/button';
+import {Link} from 'react-router-dom';
 
 const initialForm = {
   email: "",
@@ -29,6 +30,14 @@ export const Loginpage = () => {
     }
   };
 
+    const onRegisterUser = async (_target) => {
+    const isLogged = await login({ email, password });
+
+    console.log("Is loggged", isLogged);
+
+  navigate('/Register', { replace: true });
+  };
+
   const onLoginGoogleUser = async (_target) => {
     const isLogged = await loginGoogle();
 
@@ -41,15 +50,19 @@ export const Loginpage = () => {
   return (
     <>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-        <div className="container d-flex justify-content-center align-items-center bg-black" style={{ width: '500px', height: '500px' , borderRadius:'15px'}}>
+        <div className="container d-flex justify-content-center align-items-center bg-black" style={{ width: '600px', height: '600px' , borderRadius:'15px'}}>
           <div className="row w-100">
             <div className="mx-auto">
               <div className="card-body">
-                <div className="form-group d-flex justify-content-center">
+                <div className="form-group d-flex justify-content-center"
+                style={{
+                  marginBottom: '15px',
+                }}>
                   <img
                     alt="logo"
                     src="/assets/logo.png"
-                    height="40"
+                    height="=auto"
+                    width="400px"
                     className="mr-2"
                   />
                 </div>
@@ -79,6 +92,21 @@ export const Loginpage = () => {
                     style={{backgroundColor: '#B3B3B3' }}
                   />
                 </div>
+                <div style={{
+                  marginTop: '10px'
+                }}>
+                  <Link 
+                    to="../../register/pages/Register.jsx"
+                    className='text-center w-100 link-#1DB954' 
+                    style={{
+                      textDecoration:'underline',
+                      color:'#1DB954',
+                    }} 
+                    onMouseEnter={(e) => (e.target.style.color ='#B3B3B3')} 
+                    onMouseLeave={(e) => (e.target.style.color ='#1DB954')}
+                  onClick={onRegisterUser}
+                  > Crea tu cuenta aqui</Link>
+                </div>
                 <br />
 
                 <div className="form-group d-flex justify-content-center">
@@ -106,11 +134,11 @@ export const Loginpage = () => {
                   >
                     <img
                       src="assets/icons8-google.svg"
-                      style={{
-                        height:'20px',
-                        weight:'20px',
-                        marginRight:'10px'
-                      }}
+                        height='20px'
+                        weight='20px'
+                        marginRight='10px'
+                        marginBottom='20px'
+                      
                     />
                     Continuar con Google
                   </button>
@@ -118,12 +146,13 @@ export const Loginpage = () => {
 
                 {error && (
                   <div className="alert alert-danger" role="alert"
-                  style={{
-                    top:'100%',
-                    width: '100%',
-                    marginTop: '20px',
-                    marginBottom:'0'
-                  }}
+                    top='100%'
+                    width= '100%'
+                    marginTop= '30px'
+                    marginBottom='0'
+                    style={{
+                      marginTop:'20px'
+                    }}
                   >
                     {errorMessage}
 
