@@ -1,14 +1,14 @@
 import { Menubar } from 'primereact/menubar';
 import { Outlet } from 'react-router-dom';
 
-import './DashboardPage.css'; 
+import './menubar.css';
 
 export const Menu = () => {
 
-    const items = [
-        { label: 'Home', icon: 'pi pi-home' },
-        { label: 'Features', icon: 'pi pi-star' },
-      ];
+  const items = [
+    { label: 'Home', icon: 'pi pi-home', url: '/Dashboard' },
+    { label: 'Perfil', icon: 'pi pi-user', url: '/Profile' },
+  ];
 
   const start = (
     <img
@@ -20,10 +20,11 @@ export const Menu = () => {
   );
 
   const end = (
-    <div className="flex align-items-center gap-2">
-       <span className="pi pi-search">Loguot</span>
+    <div className="d-flex align-items-center gap-2 text-white">
+      <i className="pi pi-power-off"></i>
+      <p className="mb-0">Cerrar sesión</p>
     </div>
-);
+  );
 
   return (
     <div className="dashboard-container">
