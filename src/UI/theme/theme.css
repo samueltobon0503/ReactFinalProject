@@ -4768,6 +4768,9 @@
   .p-tabview-nav-next {
     right: 0;
   }
+a{
+  text-decoration: none !important;
+}
   .p-tabview-nav-content::-webkit-scrollbar {
     display: none;
   }
