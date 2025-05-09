@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getPlay } from "../../../core/services/playslistTest.service";
 import { ToggleButton } from "primereact/togglebutton";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export const DashboardPage = () => {
   const [data, setData] = useState(null);
@@ -48,56 +48,55 @@ export const DashboardPage = () => {
             className="row g-4 mb-5"
             style={{ display: "flex", overflowX: "auto" }}
           >
-           {[
-        {
-          id: "chill-vibes",
-          name: "Chill Vibes",
-          img: "https://picsum.photos/140",
-        },
-        {
-          id: "workout-hits",
-          name: "Workout Hits",
-          img: "https://picsum.photos/140",
-        },
-        {
-          id: "roadtrip-tunes",
-          name: "Roadtrip Tunes",
-          img: "https://picsum.photos/140",
-        },
-      ].map((playlist) => (
-        <div className="col-auto" key={playlist.id}>
-          <div
-            className="card bg-dark border-0 text-white"
-            style={{ width: "130px" }}
-          >
-            <img
-              src={playlist.img}
-              className="card-img-top"
-              alt={playlist.name}
-              style={{ height: "100px", objectFit: "cover" }}
-            />
-            <div className="card-body" style={{ padding: "0.5rem" }}>
-              <h6 className="card-title" style={{ fontSize: "0.9rem" }}>
-                {playlist.name}
-              </h6>
-              <Link
-                to={`/Detail/${playlist.id}`}
-                className="btn btn-success btn-sm"
-                style={{ fontSize: "0.7rem" }}
-              >
-                Detalles
-              </Link>
-            </div>
-          </div>
-        </div>
-      ))}
+            {[
+              {
+                id: "chill-vibes",
+                name: "Chill Vibes",
+                img: "https://picsum.photos/140",
+              },
+              {
+                id: "workout-hits",
+                name: "Workout Hits",
+                img: "https://picsum.photos/140",
+              },
+              {
+                id: "roadtrip-tunes",
+                name: "Roadtrip Tunes",
+                img: "https://picsum.photos/140",
+              },
+            ].map((playlist) => (
+              <div className="col-auto" key={playlist.id}>
+                <div
+                  className="card bg-dark border-0 text-white"
+                  style={{ width: "130px" }}
+                >
+                  <img
+                    src={playlist.img}
+                    className="card-img-top"
+                    alt={playlist.name}
+                    style={{ height: "100px", objectFit: "cover" }}
+                  />
+                  <div className="card-body" style={{ padding: "0.5rem" }}>
+                    <h6 className="card-title" style={{ fontSize: "0.9rem" }}>
+                      {playlist.name}
+                    </h6>
+                    <Link
+                      to={`/Detail/${playlist.id}`}
+                      className="btn btn-success btn-sm"
+                      style={{ fontSize: "0.7rem" }}
+                    >
+                      Detalles
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Contenido principal */}
         <div className="Board-Principal" style={{ flex: 1, padding: "2rem" }}>
           <h1 style={{ color: "#1DB954" }}>Contenido Principal</h1>
-          <p>Bienvenido al dashboard.</p>
 
           <h3 className="mb-4" style={{ color: "white" }}>
             Las Playlist Del Momento
@@ -147,7 +146,8 @@ export const DashboardPage = () => {
                 <div className="card-body p-5">
                   <h6 className="card-title mb-3">{playListMost.nameList}</h6>
                   <small>Seguidores: {playListMost.followers}</small>
-                  <ToggleButton
+                  <ToggleButton 
+                  
                     onLabel="Agregar"
                     offLabel="Eliminar"
                     onIcon="pi pi-check"
