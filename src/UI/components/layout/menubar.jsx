@@ -1,6 +1,5 @@
 import { Menubar } from 'primereact/menubar';
 import { Outlet } from 'react-router-dom';
-
 import './menubar.css';
 
 export const Menu = () => {
