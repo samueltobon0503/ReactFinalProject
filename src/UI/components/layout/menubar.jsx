@@ -7,6 +7,7 @@ export const Menu = () => {
   const items = [
     { label: 'Home', icon: 'pi pi-home', url: '/Dashboard' },
     { label: 'Perfil', icon: 'pi pi-user', url: '/Profile' },
+    { label: 'Prueba sin spotify', icon: 'pi pi-warning' , url:'/No-spotify-auth'},
   ];
 
   const start = (
