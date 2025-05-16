@@ -47,6 +47,35 @@ export const Loginpage = () => {
       navigate('/Dashboard', { replace: true });
     }
   }
+
+const handleSpotifyLogin = () => {
+  const client_id = '02df31b6e52843418bc48bb4157f60b5'; 
+  const redirect_uri = 'http://127.0.0.1:3000';
+  const scope = 'user-read-private user-read-email';
+
+  const generateRandomString = (length) => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  };
+
+  const state = generateRandomString(16);
+  localStorage.setItem('spotify_auth_state', state); // Guarda el state para verificar luego en el callback
+
+  const authUrl = 'https://accounts.spotify.com/authorize?' +
+    new URLSearchParams({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    });
+
+  window.location.href = authUrl;
+};
   return (
     <>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
@@ -141,6 +170,19 @@ export const Loginpage = () => {
                       
                     />
                     Continuar con Google
+                  </button>
+                </div>
+
+                 <div className="form-group d-flex justify-content-center">
+                  <button
+                    className="btn btn-primary btn-lg btn-block "
+                    onClick={handleSpotifyLogin}
+                    style={{
+                      backgroundColor:'black',
+                      border:'2px solid #1DB954'
+                    }}
+                  >
+                    Iniciar Sesión
                   </button>
                 </div>
 

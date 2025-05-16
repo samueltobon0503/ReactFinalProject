@@ -27,7 +27,6 @@ export const DashboardPage = () => {
   return (
     <div className="dashboard-content">
       <div style={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
-        {/* Sidebar */}
         <div
           className="Sidebar"
           style={{
@@ -94,7 +93,6 @@ export const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Contenido principal */}
         <div className="Board-Principal" style={{ flex: 1, padding: "2rem" }}>
           <h1 style={{ color: "#1DB954" }}>Contenido Principal</h1>
 

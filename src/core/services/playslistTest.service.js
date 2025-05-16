@@ -5,7 +5,7 @@ const BASE_URL = process.env.REACT_APP_URL_BASE;
 
 export const getPlay = () => {
     const token = getHeaders();
-    return axios.get(`${BASE_URL}/artists/4Z8W4fKeB5YxbusRsdQVPb`, {
+    return axios.get(`${BASE_URL}/albums/6i6folBtxKV28WX3msQ4FE`, {
       headers: {
         'Authorization': `Bearer ${token.access_token}`,
       }
