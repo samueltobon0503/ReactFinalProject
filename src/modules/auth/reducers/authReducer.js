@@ -21,6 +21,13 @@ export const authReducer = (state = {}, action = {}) => {
                 logged: false,
                 errorMessage: action.payload.errorMessage
             };
+        case authTypes.register:
+            return{
+                ...state,
+                logged: true,
+                user: action.payload,
+                errorMessage: null
+            }
         default:
             return state;
     }

@@ -8,7 +8,7 @@ import { Menu } from '../UI/components/layout/menubar';
 import { UserProfile } from '../modules/profile/pages/user-profile';
 
 import { NoSpotifyAuth } from '../modules/dashboard/pages/NoSpotifyAuth';
-import Register from '../modules/register/pages/Register';
+import Register from '../modules/auth/pages/Register'
 
 
 
