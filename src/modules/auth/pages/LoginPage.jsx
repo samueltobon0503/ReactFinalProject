@@ -1,9 +1,10 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../contexts/User.Context";
 import { useNavigate } from "react-router";
 import { useForm } from "../../../hooks/useForm";
-import { Button } from 'primereact/button';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { getSpotifyToken, redirectToSpotifyLogin } from "../../../core/services/authorization.service";
 
 const initialForm = {
   email: "",
@@ -13,6 +14,7 @@ const initialForm = {
 export const Loginpage = () => {
   const { userState: { errorMessage }, login, loginGoogle } = useContext(UserContext);
   const navigate = useNavigate();
+
 
   const { email, password, onInputChange } = useForm(initialForm);
 
@@ -30,12 +32,12 @@ export const Loginpage = () => {
     }
   };
 
-    const onRegisterUser = async (_target) => {
+  const onRegisterUser = async (_target) => {
     const isLogged = await login({ email, password });
 
     console.log("Is loggged", isLogged);
 
-  navigate('/Register', { replace: true });
+    navigate('/Register', { replace: true });
   };
 
   const onLoginGoogleUser = async (_target) => {
@@ -48,45 +50,39 @@ export const Loginpage = () => {
     }
   }
 
-const handleSpotifyLogin = () => {
-  const client_id = '02df31b6e52843418bc48bb4157f60b5'; 
-  const redirect_uri = 'http://127.0.0.1:3000';
-  const scope = 'user-read-private user-read-email';
-
-  const generateRandomString = (length) => {
-    let text = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
+  const handleSpo = () => {
+    redirectToSpotifyLogin();
   };
 
-  const state = generateRandomString(16);
-  localStorage.setItem('spotify_auth_state', state); // Guarda el state para verificar luego en el callback
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
 
-  const authUrl = 'https://accounts.spotify.com/authorize?' +
-    new URLSearchParams({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    });
+  const token = localStorage.getItem('spotify_access_token');
 
-  window.location.href = authUrl;
-};
+  if (code && !token) {
+    getSpotifyToken(code)
+      .then(data => {
+        console.log('Token:', data.access_token);
+        localStorage.setItem('spotify_access_token', data.access_token);
+        //TODO
+        //navigate('/Dashboard');  redirige si todo va bien
+      })
+      .catch(err => console.error('Error:', err));
+  }
+}, []);
+
   return (
     <>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-        <div className="container d-flex justify-content-center align-items-center bg-black" style={{ width: '600px', height: '600px' , borderRadius:'15px'}}>
+        <div className="container d-flex justify-content-center align-items-center bg-black" style={{ width: '600px', height: '600px', borderRadius: '15px' }}>
           <div className="row w-100">
             <div className="mx-auto">
               <div className="card-body">
                 <div className="form-group d-flex justify-content-center"
-                style={{
-                  marginBottom: '15px',
-                }}>
+                  style={{
+                    marginBottom: '15px',
+                  }}>
                   <img
                     alt="logo"
                     src="/assets/logo.png"
@@ -105,7 +101,7 @@ const handleSpotifyLogin = () => {
                     value={email}
                     onChange={onInputChange}
                     placeholder="Email"
-                    style={{backgroundColor: '#B3B3B3' }}
+                    style={{ backgroundColor: '#B3B3B3' }}
                   />
                 </div>
                 <div className="form-group">
@@ -118,22 +114,22 @@ const handleSpotifyLogin = () => {
                     value={password}
                     onChange={onInputChange}
                     placeholder="Contraseña"
-                    style={{backgroundColor: '#B3B3B3' }}
+                    style={{ backgroundColor: '#B3B3B3' }}
                   />
                 </div>
                 <div style={{
                   marginTop: '10px'
                 }}>
-                  <Link 
+                  <Link
                     to="../../register/pages/Register.jsx"
-                    className='text-center w-100 link-#1DB954' 
+                    className='text-center w-100 link-#1DB954'
                     style={{
-                      textDecoration:'underline',
-                      color:'#1DB954',
-                    }} 
-                    onMouseEnter={(e) => (e.target.style.color ='#B3B3B3')} 
-                    onMouseLeave={(e) => (e.target.style.color ='#1DB954')}
-                  onClick={onRegisterUser}
+                      textDecoration: 'underline',
+                      color: '#1DB954',
+                    }}
+                    onMouseEnter={(e) => (e.target.style.color = '#B3B3B3')}
+                    onMouseLeave={(e) => (e.target.style.color = '#1DB954')}
+                    onClick={onRegisterUser}
                   > Crea tu cuenta aqui</Link>
                 </div>
                 <br />
@@ -143,8 +139,8 @@ const handleSpotifyLogin = () => {
                     className="btn btn-primary btn-lg btn-block "
                     onClick={onLoginUser}
                     style={{
-                      backgroundColor:'black',
-                      border:'2px solid #1DB954'
+                      backgroundColor: 'black',
+                      border: '2px solid #1DB954'
                     }}
                   >
                     Iniciar Sesión
@@ -157,29 +153,29 @@ const handleSpotifyLogin = () => {
                     className="btn btn-primary btn-lg btn-block "
                     onClick={onLoginGoogleUser}
                     style={{
-                      backgroundColor:'black',
-                      borderColor:'white'
+                      backgroundColor: 'black',
+                      borderColor: 'white'
                     }}
                   >
                     <img
                       src="assets/icons8-google.svg"
-                        height='20px'
-                        weight='20px'
-                        marginRight='10px'
-                        marginBottom='20px'
-                      
+                      height='20px'
+                      weight='20px'
+                      marginRight='10px'
+                      marginBottom='20px'
+
                     />
                     Continuar con Google
                   </button>
                 </div>
 
-                 <div className="form-group d-flex justify-content-center">
+                <div className="form-group d-flex justify-content-center">
                   <button
                     className="btn btn-primary btn-lg btn-block "
-                    onClick={handleSpotifyLogin}
+                    onClick={handleSpo}
                     style={{
-                      backgroundColor:'black',
-                      border:'2px solid #1DB954'
+                      backgroundColor: 'black',
+                      border: '2px solid #1DB954'
                     }}
                   >
                     Iniciar Sesión
@@ -189,11 +185,11 @@ const handleSpotifyLogin = () => {
                 {error && (
                   <div className="alert alert-danger" role="alert"
                     top='100%'
-                    width= '100%'
-                    marginTop= '30px'
+                    width='100%'
+                    marginTop='30px'
                     marginBottom='0'
                     style={{
-                      marginTop:'20px'
+                      marginTop: '20px'
                     }}
                   >
                     {errorMessage}
