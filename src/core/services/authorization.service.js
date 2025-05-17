@@ -13,7 +13,7 @@ export const redirectToSpotifyLogin = () => {
   console.log(redirectUri)
 
 
-  const authUrl = process.env.REACT_APP_SPOTIFY_AUTH_URL +
+  const authUrl = `${process.env.REACT_APP_SPOTIFY_ACCOUNT_URL}/authorize?` +
     new URLSearchParams({
       response_type: 'code',
       client_id: clientId,
@@ -34,7 +34,7 @@ export const getSpotifyToken = async (code) => {
   const clientSecret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
   const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
 
-  const tokenUrl = process.env.REACT_APP_SPOTIFY_USER_URL;
+  const tokenUrl = `${process.env.REACT_APP_SPOTIFY_ACCOUNT_URL}/api/token`;
 
   const headers = {
     'Authorization': 'Basic ' + btoa(`${clientId}:${clientSecret}`),

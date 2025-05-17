@@ -3,8 +3,7 @@ import { UserContext } from "../contexts/User.Context";
 import { useNavigate } from "react-router";
 import { useForm } from "../../../hooks/useForm";
 import { Link } from 'react-router-dom';
-import { getSpotifyToken, redirectToSpotifyLogin } from "../../../core/services/authorization.service";
-
+import { redirectToSpotifyLogin } from "../../../core/services/authorization.service";
 
 const initialForm = {
   email: "",
@@ -12,7 +11,7 @@ const initialForm = {
 }
 
 export const Loginpage = () => {
-  const { userState: { errorMessage }, login, loginGoogle } = useContext(UserContext);
+  const { userState: { errorMessage }, login, loginGoogle, SpotifyLogin } = useContext(UserContext);
   const navigate = useNavigate();
 
 
@@ -50,27 +49,27 @@ export const Loginpage = () => {
     }
   }
 
-  const handleSpo = () => {
+  const onSpotifyLogin = () => {
     redirectToSpotifyLogin();
   };
 
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get('code');
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
 
-  const token = localStorage.getItem('spotify_access_token');
+    const token = localStorage.getItem('spotify_access_token');
 
-  if (code && !token) {
-    getSpotifyToken(code)
-      .then(data => {
-        console.log('Token:', data.access_token);
-        localStorage.setItem('spotify_access_token', data.access_token);
-        //TODO
-        //navigate('/Dashboard');  redirige si todo va bien
-      })
-      .catch(err => console.error('Error:', err));
-  }
-}, []);
+    if (code && !token) {
+      SpotifyLogin(code)
+        .then(isLogged => {
+          if (isLogged) {
+            navigate('/Dashboard', { replace: true });
+          }
+        })
+        .catch(console.error);
+    }
+  }, []);
+
   return (
     <>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
@@ -147,7 +146,7 @@ useEffect(() => {
                 </div>
                 <br />
 
-                <div className="form-group d-flex justify-content-center">
+                <div className="form-group d-flex justify-content-center align-items-center">
                   <button
                     className="btn btn-primary btn-lg btn-block "
                     onClick={onLoginGoogleUser}
@@ -160,9 +159,7 @@ useEffect(() => {
                       src="assets/icons8-google.svg"
                       height='20px'
                       weight='20px'
-                      marginRight='10px'
-                      marginBottom='20px'
-
+                      alt="google"
                     />
                     Continuar con Google
                   </button>
@@ -171,7 +168,7 @@ useEffect(() => {
                 <div className="form-group d-flex justify-content-center">
                   <button
                     className="btn btn-primary btn-lg btn-block "
-                    onClick={handleSpo}
+                    onClick={onSpotifyLogin}
                     style={{
                       backgroundColor: 'black',
                       border: '2px solid #1DB954'

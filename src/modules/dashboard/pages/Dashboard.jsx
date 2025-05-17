@@ -8,17 +8,17 @@ export const DashboardPage = () => {
   const [error, setError] = useState(null);
   const [checkedStates, setCheckedStates] = useState({});
 
-  useEffect(() => {
-    getPlay()
-      .then((response) => {
-        console.log("Data:", response);
-        setData(response);
-      })
-      .catch((error) => {
-        console.error("Error data:", error);
-        setError(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getPlay()
+  //     .then((response) => {
+  //       console.log("Data:", response);
+  //       setData(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error data:", error);
+  //       setError(error);
+  //     });
+  // }, []);
 
   const playlists = Array.isArray(data)
     ? data
