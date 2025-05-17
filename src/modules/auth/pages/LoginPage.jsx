@@ -3,8 +3,8 @@ import { UserContext } from "../contexts/User.Context";
 import { useNavigate } from "react-router";
 import { useForm } from "../../../hooks/useForm";
 import { Link } from 'react-router-dom';
-
 import { getSpotifyToken, redirectToSpotifyLogin } from "../../../core/services/authorization.service";
+
 
 const initialForm = {
   email: "",
@@ -71,7 +71,6 @@ useEffect(() => {
       .catch(err => console.error('Error:', err));
   }
 }, []);
-
   return (
     <>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
