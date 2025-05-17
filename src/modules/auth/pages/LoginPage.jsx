@@ -1,9 +1,10 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../contexts/User.Context";
 import { useNavigate } from "react-router";
 import { useForm } from "../../../hooks/useForm";
-import { Button } from 'primereact/button';
 import { Link } from 'react-router-dom';
+import { getSpotifyToken, redirectToSpotifyLogin } from "../../../core/services/authorization.service";
+
 
 const initialForm = {
   email: "",
@@ -13,6 +14,7 @@ const initialForm = {
 export const Loginpage = () => {
   const { userState: { errorMessage }, login, loginGoogle } = useContext(UserContext);
   const navigate = useNavigate();
+
 
   const { email, password, onInputChange } = useForm(initialForm);
 
@@ -48,34 +50,27 @@ export const Loginpage = () => {
     }
   }
 
-  const handleSpotifyLogin = () => {
-    const client_id = '02df31b6e52843418bc48bb4157f60b5';
-    const redirect_uri = 'http://127.0.0.1:3000';
-    const scope = 'user-read-private user-read-email';
-
-    const generateRandomString = (length) => {
-      let text = '';
-      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (let i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-      return text;
-    };
-
-    const state = generateRandomString(16);
-    localStorage.setItem('spotify_auth_state', state); // Guarda el state para verificar luego en el callback
-
-    const authUrl = 'https://accounts.spotify.com/authorize?' +
-      new URLSearchParams({
-        response_type: 'code',
-        client_id: client_id,
-        scope: scope,
-        redirect_uri: redirect_uri,
-        state: state
-      });
-
-    window.location.href = authUrl;
+  const handleSpo = () => {
+    redirectToSpotifyLogin();
   };
+
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+
+  const token = localStorage.getItem('spotify_access_token');
+
+  if (code && !token) {
+    getSpotifyToken(code)
+      .then(data => {
+        console.log('Token:', data.access_token);
+        localStorage.setItem('spotify_access_token', data.access_token);
+        //TODO
+        //navigate('/Dashboard');  redirige si todo va bien
+      })
+      .catch(err => console.error('Error:', err));
+  }
+}, []);
   return (
     <>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
@@ -176,7 +171,7 @@ export const Loginpage = () => {
                 <div className="form-group d-flex justify-content-center">
                   <button
                     className="btn btn-primary btn-lg btn-block "
-                    onClick={handleSpotifyLogin}
+                    onClick={handleSpo}
                     style={{
                       backgroundColor: 'black',
                       border: '2px solid #1DB954'
