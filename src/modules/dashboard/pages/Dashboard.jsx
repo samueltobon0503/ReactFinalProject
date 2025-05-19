@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
-import { getPlay } from "../../../core/services/playslistTest.service";
+import { use, useEffect, useState } from "react";
 import { ToggleButton } from "primereact/togglebutton";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
+import { getUserPlaylists } from "../../../core/services/playslistTest.service";
+
 
 export const DashboardPage = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [checkedStates, setCheckedStates] = useState({});
+  const [playlists, setPlaylists] = useState([]);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   getPlay()
-  //     .then((response) => {
-  //       console.log("Data:", response);
-  //       setData(response);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error data:", error);
-  //       setError(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user.provider || user.provider !== 'spotify'){
+        navigate('/No-spotify-auth', { replace: true });
+      }
 
-  const playlists = Array.isArray(data)
-    ? data
-    : data?.playlists || data?.items || [];
-
+      getUserPlaylists()
+      .then(response => {
+        setPlaylists(response.data); // o `response.data.items`, según tu backend
+      })
+      .catch(error => {
+        console.error("Error fetching playlists:", error);
+        setError("Error al obtener las playlists");
+      });
+  }, []);
+  
   return (
     <div className="dashboard-content">
       <div style={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
@@ -103,58 +106,32 @@ export const DashboardPage = () => {
             style={{ display: "flex", gap: "1rem", overflowX: "auto" }}
             className="mb-5"
           >
-            {[
-              {
-                nameList: "Clasicos de Rock",
-                img: "https://images.pexels.com/photos/811838/pexels-photo-811838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                followers: "18,345",
-              },
-              {
-                nameList: "Musica para planchar",
-                img: "https://images.pexels.com/photos/31963420/pexels-photo-31963420.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                followers: "15,876",
-              },
-              {
-                nameList: "Para hacer el suculento",
-                img: "https://images.pexels.com/photos/965879/pexels-photo-965879.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                followers: "13,210",
-              },
-              {
-                nameList: "Tracklist StarWars",
-                img: "https://i0.wp.com/imgs.hipertextual.com/wp-content/uploads/2020/12/star-wars-scaled.jpg?resize=1200%2C675&quality=70&strip=all&ssl=1",
-                followers: "8,210",
-              },
-              {
-                nameList: "SadList",
-                img: "https://img.freepik.com/foto-gratis/vista-superior-papel-roto-corazon-rojo_23-2149415855.jpg?ga=GA1.1.1799899732.1746798904&semt=ais_hybrid&w=740",
-                followers: "5,210",
-              },
-            ].map((playListMost, i) => (
+            {playlists?.items?.map((playListMost) => (
               <div
-                key={playListMost.nameList}
+                key={playListMost.id}
                 className="card bg-dark text-white"
                 style={{ width: "280px", minWidth: "180px" }}
               >
                 <img
-                  src={playListMost.img}
+                  src={playListMost.images?.[0]?.url }
                   className="card-img-top"
                   alt={playListMost.nameList}
                   style={{ height: "280px", objectFit: "cover" }}
                 />
                 <div className="card-body p-5">
-                  <h6 className="card-title mb-3">{playListMost.nameList}</h6>
-                  <small>Seguidores: {playListMost.followers}</small>
+                  <h6 className="card-title mb-3">{playListMost.name}</h6>
+                  <small>Seguidores: {playListMost.tracks?.total}</small>
                   <ToggleButton 
                   
                     onLabel="Agregar"
                     offLabel="Eliminar"
                     onIcon="pi pi-check"
                     offIcon="pi pi-times"
-                    checked={checkedStates[playListMost.nameList] || false}
+                    checked={checkedStates[playListMost.id] || false}
                     onChange={(e) =>
                       setCheckedStates((prev) => ({
                         ...prev,
-                        [playListMost.nameList]: e.value,
+                        [playListMost.id]: e.value,
                       }))
                     }
                   />

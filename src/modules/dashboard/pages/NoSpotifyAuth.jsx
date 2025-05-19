@@ -1,5 +1,3 @@
-import React from 'react'
-
 
 export const NoSpotifyAuth = () => {
     return (
@@ -15,8 +13,9 @@ export const NoSpotifyAuth = () => {
                                 className="mr-2"
                             />
                         </div>
-                        <label className='text-center w-100 text-white' style={{marginTop:'20px'}}> No has iniciado sesion</label>
-                        <p className='text-center w-100 ' style={{ textDecoration:'underline', colore:'white', cursor:'pointer'}} onMouseEnter={(e) => (e.target.style.color ='#B3B3B3')} onMouseLeave={(e) => (e.target.style.color ='#1DB954')}> Inicia sesion aqui</p>
+                        <label className='text-center w-100 text-white' style={{marginTop:'20px'}}> No has iniciado sesion con Spotify</label>
+                        <p className='text-center w-100 '
+                        style={{ textDecoration:'underline', color:'white', cursor:'pointer'}}> Inicia sesion aqui</p>
                     </div>
                 </div>
             </div>

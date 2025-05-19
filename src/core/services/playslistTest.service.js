@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { getHeaders } from '../../shared/getHeaders';
+import { getUserId } from '../../shared/getUserId';
 
 const BASE_URL = process.env.REACT_APP_URL_BASE;
 
-export const getPlay = () => {
+export const getUserPlaylists = () => {
     const token = getHeaders();
-    return axios.get(`${BASE_URL}/albums/6i6folBtxKV28WX3msQ4FE`, {
+    const userId = getUserId();
+    return axios.get(`${BASE_URL}/users/${userId}/playlists`, {
       headers: {
-        'Authorization': `Bearer ${token.access_token}`,
+        'Authorization': `Bearer ${token}`,
       }
     });
   };

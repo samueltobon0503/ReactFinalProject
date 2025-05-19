@@ -101,14 +101,16 @@ export const useAuthenticate = (dispatch) => {
 
             const {data} = await getUserProfile();
 
+            console.log(data)
+
             if (!data.email) {
                 throw new Error('No se pudo obtener el perfil del usuario');
             }
 
             const userPayload = {
-                email: data.dataemail,
+                email: data.email,
                 displayName: data.display_name || data.id,
-                uid: data.id,
+                id: data.id,
                 photoUrl: data.images?.[0]?.url || null,
                 provider: 'spotify'
             };
