@@ -66,7 +66,7 @@ export const Loginpage = () => {
             navigate('/Dashboard', { replace: true });
           }
         })
-        .catch(console.error);
+        .catch(setError(true));
     }
   }, []);
 

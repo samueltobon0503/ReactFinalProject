@@ -10,7 +10,6 @@ export function getHeaders() {
   try {
     const bytes = CryptoJS.AES.decrypt(encryptedToken, SECRET_KEY);
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    console.log("Toekn",JSON.parse(decrypted) )
 
     return JSON.parse(decrypted);
   } catch (err) {
