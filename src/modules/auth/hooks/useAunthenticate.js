@@ -3,10 +3,13 @@ import { getUserProfile } from "../../../core/services/UserProfile.service";
 import { loginUser, loginWithGoogle, registerWithEmail, } from "../../../firebase/provider";
 import { authTypes } from "../types/authTypes";
 import CryptoJS from 'crypto-js';
+import { useNavigate } from "react-router";
 
 const SECRET_KEY = process.env.REACT_APP_SPOTIFY_ENCRYPT_KEY;
 
 export const useAuthenticate = (dispatch) => {
+
+    const navigate = useNavigate();
 
     const login = async ({ email, password }) => {
 
@@ -60,6 +63,10 @@ export const useAuthenticate = (dispatch) => {
     }
 
     const logout = () => {
+
+        localStorage.clear();
+        navigate('/Login', { replace: true });
+
         const action = {
             type: authTypes.logout,
         };
@@ -99,7 +106,7 @@ export const useAuthenticate = (dispatch) => {
                 .toString();
             localStorage.setItem('spotify_access_token', encryptedToken);
 
-            const {data} = await getUserProfile();
+            const { data } = await getUserProfile();
 
             console.log(data)
 

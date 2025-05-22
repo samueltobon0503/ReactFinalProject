@@ -1,5 +1,10 @@
+import { useNavigate } from "react-router";
 
 export const NoSpotifyAuth = () => {
+    const navigate = useNavigate();
+    const onRedirect = async (_target) => {
+        navigate('/Login', { replace: true });
+    };
     return (
         <>
             <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
@@ -13,9 +18,9 @@ export const NoSpotifyAuth = () => {
                                 className="mr-2"
                             />
                         </div>
-                        <label className='text-center w-100 text-white' style={{marginTop:'20px'}}> No has iniciado sesion con Spotify</label>
-                        <p className='text-center w-100 '
-                        style={{ textDecoration:'underline', color:'white', cursor:'pointer'}}> Inicia sesion aqui</p>
+                        <label className='text-center w-100 text-white' style={{ marginTop: '20px' }}> No has iniciado sesion con Spotify</label>
+                        <p className='text-center w-100 ' onClick={onRedirect}
+                            style={{ textDecoration: 'underline', color: 'white', cursor: 'pointer' }}> Inicia sesion aqui</p>
                     </div>
                 </div>
             </div>
