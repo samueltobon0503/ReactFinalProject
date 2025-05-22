@@ -1,14 +1,23 @@
 import { Menubar } from 'primereact/menubar';
 import { Outlet } from 'react-router-dom';
 import './menubar.css';
+import { useContext } from 'react';
+import { UserContext } from '../../../modules/auth/contexts/User.Context';
 
 export const Menu = () => {
+
+    const { logout } = useContext(UserContext);
 
   const items = [
     { label: 'Home', icon: 'pi pi-home', url: '/Dashboard' },
     { label: 'Perfil', icon: 'pi pi-user', url: '/Profile' },
-    { label: 'Prueba sin spotify', icon: 'pi pi-warning' , url:'/No-spotify-auth'},
+    // { label: 'Prueba sin spotify', icon: 'pi pi-warning' , url:'/No-spotify-auth'},
   ];
+
+    const onLogOut = (_target) => {
+      logout()
+   };
+
 
   const start = (
     <img
@@ -20,9 +29,9 @@ export const Menu = () => {
   );
 
   const end = (
-    <div className="d-flex align-items-center gap-2 text-white">
+    <div className="d-flex align-items-center gap-2 text-white logout">
       <i className="pi pi-power-off"></i>
-      <p className="mb-0">Cerrar sesión</p>
+      <p onClick={onLogOut} className="mb-0">Cerrar sesión</p>
     </div>
   );
 

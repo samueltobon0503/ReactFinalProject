@@ -11,12 +11,10 @@ const initialForm = {
 }
 
 export const Loginpage = () => {
+
   const { userState: { errorMessage }, login, loginGoogle, SpotifyLogin } = useContext(UserContext);
   const navigate = useNavigate();
-
-
   const { email, password, onInputChange } = useForm(initialForm);
-
   const [error, setError] = useState(false);
 
   const onLoginUser = async (_target) => {
@@ -57,17 +55,16 @@ export const Loginpage = () => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
 
-    const token = localStorage.getItem('spotify_access_token');
+    if (!code) return;
 
-    if (code && !token) {
-      SpotifyLogin(code)
-        .then(isLogged => {
-          if (isLogged) {
-            navigate('/Dashboard', { replace: true });
-          }
-        })
-        .catch(setError(true));
-    }
+    // Siempre intenta loguear con el nuevo code
+    SpotifyLogin(code)
+      .then(isLogged => {
+        if (isLogged) {
+          navigate('/Dashboard', { replace: true });
+        }
+      })
+      .catch(console.error);
   }, []);
 
   return (
@@ -157,15 +154,17 @@ export const Loginpage = () => {
                   >
                     <img
                       src="assets/icons8-google.svg"
-                      height='20px'
-                      weight='20px'
+                      height='30px'
+                      weight='30px'
                       alt="google"
+                      style={{ marginBottom: '5px', marginRight: '5px' }}
                     />
                     Continuar con Google
                   </button>
                 </div>
+                <br />
 
-                <div className="form-group d-flex justify-content-center">
+                <div className="form-group d-flex justify-content-center align-items-center">
                   <button
                     className="btn btn-primary btn-lg btn-block "
                     onClick={onSpotifyLogin}
@@ -174,7 +173,14 @@ export const Loginpage = () => {
                       border: '2px solid #1DB954'
                     }}
                   >
-                    Iniciar Sesión
+                    <img
+                      src="assets/spotify-icon.svg"
+                      height='30px'
+                      weight='30px'
+                      alt="spotify"
+                      style={{ marginBottom: '5px', marginRight: '5px' }}
+                    />
+                    Continuar con Spotify
                   </button>
                 </div>
 
