@@ -1,19 +1,34 @@
+import { useEffect, useState } from "react";
+import { getUserProfile } from "../../../core/services/UserProfile.service";
 
 export const UserProfile = () => {
+
+    const [user, setUser] = useState([]);
+  
+  useEffect(() => {
+    getUserProfile()
+        .then(response => {
+          setUser(response); // o `response.data.items`, según tu backend
+        console.log(response)
+        })
+        .catch(error => {
+          console.error("Error fetching playlists:", error);
+        });
+    }, []);
 
   return (
     <div className="container py-5 text-white">
       <div className="d-flex align-items-center gap-4 mb-5">
         <img
-          src="/assets/persona.jpg"
+          src={user.data?.images?.[0]?.url || '/assets/user-default.png'}
           alt="Avatar Usuario"
           width="190"
           height="200"
         />
         <div>
-          <h1 className="mb-1">Juan Pérez</h1>
-          <p className="mb-0">juan.perez@example.com</p>
-          <small>País: ES · Cuenta: Premium · Seguidores: 1,234</small>
+          <h1 className="mb-1">{user.data?.display_name}</h1>
+          <p className="mb-0">{user.data?.email}</p>
+          <small>País: {user.data?.country} · Cuenta: Premium · Seguidores:  {user.data?.followers.total} </small>
         </div>
       </div>
   
@@ -21,7 +36,7 @@ export const UserProfile = () => {
         <div className="col-md-4 mb-3">
           <div className="card bg-secondary text-center p-3">
             <h5>Playlists</h5>
-            <p className="display-6 mb-0">12</p>
+            <p className="display-6 mb-0">{}</p>
           </div>
         </div>
         <div className="col-md-4 mb-3">
