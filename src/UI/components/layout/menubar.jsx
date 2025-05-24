@@ -6,7 +6,7 @@ import { UserContext } from '../../../modules/auth/contexts/User.Context';
 
 export const Menu = () => {
 
-    const { logout } = useContext(UserContext);
+  const { logout } = useContext(UserContext);
 
   const items = [
     { label: 'Home', icon: 'pi pi-home', url: '/Dashboard' },
@@ -14,9 +14,9 @@ export const Menu = () => {
     // { label: 'Prueba sin spotify', icon: 'pi pi-warning' , url:'/No-spotify-auth'},
   ];
 
-    const onLogOut = (_target) => {
-      logout()
-   };
+  const onLogOut = (_target) => {
+    logout()
+  };
 
 
   const start = (
@@ -31,7 +31,10 @@ export const Menu = () => {
   const end = (
     <div className="d-flex align-items-center gap-2 text-white logout">
       <i className="pi pi-power-off"></i>
-      <p onClick={onLogOut} className="mb-0">Cerrar sesión</p>
+      <p onClick={onLogOut} className="mb-0"
+        onMouseEnter={(e) => (e.target.style.color = '#B3B3B3')}
+        onMouseLeave={(e) => (e.target.style.color = 'white')}
+      >Cerrar sesión</p>
     </div>
   );
 
