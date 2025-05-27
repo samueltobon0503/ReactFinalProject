@@ -1,32 +1,51 @@
-import { use, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ToggleButton } from "primereact/togglebutton";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { getUserPlaylists } from "../../../core/services/playslistTest.service";
+import { PlaylistContext } from "../../playlists/contexts/PlaylistContext";
 
 
 export const DashboardPage = () => {
   const [checkedStates, setCheckedStates] = useState({});
+  const { savePlaylist, getPlaylists } = useContext(PlaylistContext);
+
   const [playlists, setPlaylists] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user.provider || user.provider !== 'spotify'){
-        navigate('/No-spotify-auth', { replace: true });
-      }
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user.provider || user.provider !== 'spotify') {
+      navigate('/No-spotify-auth', { replace: true });
+    }
 
-      getUserPlaylists()
+    getUserPlaylists()
       .then(response => {
-        setPlaylists(response.data); // o `response.data.items`, según tu backend
+        setPlaylists(response.data);
+        const firstItem = response.data.items?.[0];
+        if (firstItem) {
+          savePlaylist(firstItem);
+        } else {
+          console.warn("No hay items en las playlists");
+        }
       })
       .catch(error => {
         console.error("Error fetching playlists:", error);
         setError("Error al obtener las playlists");
       });
+        mostrarPlaylistsGuardadas();
   }, []);
-  
+
+const mostrarPlaylistsGuardadas = async () => {
+  try {
+    const savedPlaylists = await getPlaylists();
+    console.log("Playlists guardadas en Firestore:", savedPlaylists);
+  } catch (error) {
+    console.error("Error al obtener playlists guardadas:", error);
+  }
+};
+
   return (
     <div className="dashboard-content">
       <div style={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
@@ -113,7 +132,7 @@ export const DashboardPage = () => {
                 style={{ width: "280px", minWidth: "180px" }}
               >
                 <img
-                  src={playListMost.images?.[0]?.url }
+                  src={playListMost.images?.[0]?.url}
                   className="card-img-top"
                   alt={playListMost.nameList}
                   style={{ height: "280px", objectFit: "cover" }}
@@ -121,8 +140,8 @@ export const DashboardPage = () => {
                 <div className="card-body p-5">
                   <h6 className="card-title mb-3">{playListMost.name}</h6>
                   <small>Seguidores: {playListMost.tracks?.total}</small>
-                  <ToggleButton 
-                  
+                  <ToggleButton
+
                     onLabel="Agregar"
                     offLabel="Eliminar"
                     onIcon="pi pi-check"
