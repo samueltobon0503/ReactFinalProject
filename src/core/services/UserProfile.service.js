@@ -12,3 +12,13 @@ export const getUserProfile = () => {
       }
     });
   };
+
+export const getUserArtists = () => {
+    const token = getHeaders();
+    console.log(token)
+    return axios.get(`${BASE_URL}/me/following?type=artist`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+  };
