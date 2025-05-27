@@ -1,20 +1,51 @@
 import { useEffect, useState } from "react";
-import { getUserProfile } from "../../../core/services/UserProfile.service";
+import { getUserArtists, getUserProfile } from "../../../core/services/UserProfile.service";
+import { useNavigate } from "react-router";
+import { getUserPlaylists } from "../../../core/services/playslistTest.service";
+import { ToggleButton } from "primereact/togglebutton";
 
 export const UserProfile = () => {
 
-    const [user, setUser] = useState([]);
-  
+  const [user, setUser] = useState([]);
+  const [checkedStates, setCheckedStates] = useState({});
+  const [playlists, setPlaylists] = useState([])
+  const [artists, setArtists] = useState([])
+  const [error, setError] = useState(null)
+  const navigate = useNavigate();
+
   useEffect(() => {
     getUserProfile()
-        .then(response => {
-          setUser(response); // o `response.data.items`, según tu backend
+      .then(response => {
+        setUser(response); // o `response.data.items`, según tu backend
+      })
+      .catch(error => {
+        console.error("Error fetching playlists:", error);
+      });
+
+      const user = JSON.parse(localStorage.getItem('user'));
+    if (!user.provider || user.provider !== 'spotify') {
+      navigate('/No-spotify-auth', { replace: true });
+    }
+
+    getUserPlaylists()
+      .then(response => {
+        setPlaylists(response.data); // o `response.data.items`, según tu backend
+      })
+      .catch(error => {
+        console.error("Error fetching playlists:", error);
+        setError("Error al obtener las playlists");
+      });
+
+      getUserArtists()
+      .then(response => {
         console.log(response)
-        })
-        .catch(error => {
-          console.error("Error fetching playlists:", error);
-        });
-    }, []);
+        setArtists(response.data); // o `response.data.items`, según tu backend
+      })
+      .catch(error => {
+        console.error("Error fetching playlists:", error);
+        setError("Error al obtener las playlists");
+      });
+  }, []);
 
   return (
     <div className="container py-5 text-white">
@@ -31,88 +62,65 @@ export const UserProfile = () => {
           <small>País: {user.data?.country} · Cuenta: Premium · Seguidores:  {user.data?.followers.total} </small>
         </div>
       </div>
-  
+
       <div className="row mb-5">
         <div className="col-md-4 mb-3">
           <div className="card bg-secondary text-center p-3">
             <h5>Playlists</h5>
-            <p className="display-6 mb-0">{}</p>
+            <p className="display-6 mb-0">{playlists?.total}</p>
           </div>
         </div>
         <div className="col-md-4 mb-3">
           <div className="card bg-secondary text-center p-3">
             <h5>Artistas seguidos</h5>
-            <p className="display-6 mb-0">45</p>
+            <p className="display-6 mb-0">{}</p>
           </div>
         </div>
         <div className="col-md-4 mb-3">
           <div className="card bg-secondary text-center p-3">
             <h5>Canciones guardadas</h5>
-            <p className="display-6 mb-0">320</p>
+            <p className="display-6 mb-0">buscar{}</p>
           </div>
         </div>
       </div>
-  
+
       <h3 className="mb-4">Tus Playlists</h3>
-      <div className="row row-cols-1 row-cols-md-3 g-4 mb-5">
-        <div className="col">
-          <div className="card h-100 bg-dark border-0 text-white">
+      <div className="row row-cols-1 row-cols-md-3 g-4 mb-5 d-flex" >
+
+        {playlists?.items?.map((playListMost) => (
+          <div
+            key={playListMost.id}
+            className="card bg-dark text-white justify-content-center"
+            style={{ width: "280px", minWidth: "180px" , margin: '10px'}}
+          >
             <img
-              src="https://picsum.photos/200"
+              src={playListMost.images?.[0]?.url}
               className="card-img-top"
-              alt="Chill Vibes"
+              alt={playListMost.nameList}
+              style={{ height: "280px", objectFit: "cover" }}
             />
-            <div className="card-body">
-              <h5 className="card-title">Chill Vibes</h5>
-              <p className="card-text">35 canciones · 2,145 seguidores</p>
-              <a href="#" className="btn btn-success btn-sm">Ver en Spotify</a>
+            <div className="card-body p-5">
+              <h6 className="card-title mb-3">{playListMost.name}</h6>
+              <small>Seguidores: {playListMost.tracks?.total}</small>
+              <ToggleButton
+
+                onLabel="Agregar"
+                offLabel="Eliminar"
+                onIcon="pi pi-check"
+                offIcon="pi pi-times"
+                checked={checkedStates[playListMost.id] || false}
+                onChange={(e) =>
+                  setCheckedStates((prev) => ({
+                    ...prev,
+                    [playListMost.id]: e.value,
+                  }))
+                }
+              />
             </div>
           </div>
-        </div>
-        <div className="col">
-          <div className="card h-100 bg-dark border-0 text-white">
-            <img
-              src="https://picsum.photos/200"
-              className="card-img-top"
-            />
-            <div className="card-body">
-              <h5 className="card-title">Workout Hits</h5>
-              <p className="card-text">50 canciones · 5,678 seguidores</p>
-              <a href="#" className="btn btn-success btn-sm">Ver en Spotify</a>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card h-100 bg-dark border-0 text-white">
-            <img
-              src="https://picsum.photos/200"
-              className="card-img-top"
-              alt="Roadtrip Tunes"
-            />
-            <div className="card-body">
-              <h5 className="card-title">Roadtrip Tunes</h5>
-              <p className="card-text">28 canciones · 1,022 seguidores</p>
-              <a href="#" className="btn btn-success btn-sm">Ver en Spotify</a>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-      <h3 className="mb-4">Tus Artistas Favoritos</h3>
-      <ul className="list-group list-group-flush mb-5">
-        {[
-          { name: 'Rosalía', img: 'https://picsum.photos/200', followers: '12,345' },
-          { name: 'Bad Bunny', img: 'https://picsum.photos/200', followers: '9,876' },
-          { name: 'The Weeknd', img: 'https://picsum.photos/200', followers: '15,210' }
-        ].map((artist, i) => (
-          <li key={i} className="list-group-item bg-transparent d-flex align-items-center text-white">
-            <img src={artist.img} alt={artist.name} className="rounded-circle me-3" width="50" height="50" />
-            <span>{artist.name}</span>
-            <span className="ms-auto">Seguidores: {artist.followers}</span>
-          </li>
         ))}
-      </ul>
-  
+      </div>
+
       <h3 className="mb-4">Reproducciones Recientes</h3>
       <table className="table table-dark table-striped">
         <thead>
