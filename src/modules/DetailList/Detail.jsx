@@ -1,52 +1,58 @@
 import { useParams, useNavigate } from "react-router-dom";
-const mockPlaylists = {
-  "chill-vibes": {
-    title: "Chill Vibes",
-    description: "Relájate con esta selección de canciones suaves.",
-    image: "https://picsum.photos/id/1011/600/300",
-    songs: ["Lofi Beat", "Chillstep", "Soft Guitar", "Ambient Relax"],
-  },
-  "workout-hits": {
-    title: "Workout Hits",
-    description: "Energía total para tus rutinas de ejercicio.",
-    image: "https://picsum.photos/id/102/600/300",
-    songs: ["Push It", "Run Fast", "Sweat Mode", "Beast Mode"],
-  },
-  "roadtrip-tunes": {
-    title: "Roadtrip Tunes",
-    description: "Canciones ideales para viajar y disfrutar del camino.",
-    image: "https://picsum.photos/id/103/600/300",
-    songs: ["Highway Drive", "Freedom", "Wanderlust", "Rolling Wheels"],
-  },
-};
+import { useEffect, useState } from "react";
+import { getPlaylistById} from "../../../src/core/services/playslistTest.service";
+import axios from "axios";
+
+
 export const DetailList = () => {
   const { id } = useParams();
-  const playlist = mockPlaylists[id];
   const navigate = useNavigate();
+  const [playlist, setPlaylist] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  if (!playlist) {
-    return <h2 className="text-white p-5">Playlist no encontrada</h2>;
-  }
+  const token = JSON.parse(localStorage.getItem("token"));
 
+  useEffect(() => {
+    const fetchPlaylist = async () => {
+      try {
+        const response = await getPlaylistById(id);
+        setPlaylist(response.data);
+      } catch (err) {
+        console.error("Error cargando playlist:", err);
+        setError("No se pudo cargar la playlist");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlaylist();
+  }, [id]);
+
+  if (loading) return <p className="text-white p-5">Cargando detalles...</p>;
+  if (error || !playlist) return <p className="text-white p-5">{error}</p>;
+  
   return (
     <div className="container py-5 text-white">
-        <button
+      <button
         onClick={() => navigate("/Dashboard")}
         className="btn btn-outline-light mb-4"
       >
         ← Volver al inicio
       </button>
-      <h2 className="mb-4">{playlist.title}</h2>
+
+      <h2 className="mb-4">{playlist.name}</h2>
       <img
-        src={playlist.image}
-        alt={playlist.title}
+        src={playlist.images?.[0]?.url}
+        alt={playlist.name}
         className="img-fluid mb-4 rounded"
       />
-      <p className="mb-4">{playlist.description}</p>
+      <p className="mb-4">{playlist.description || "Sin descripción"}</p>
+
       <h5>Canciones incluidas:</h5>
       <ul>
-        {playlist.songs.map((song, index) => (
-          <li key={index}>{song}</li>
+        {playlist.tracks?.items?.map((item, index) => (
+          <li key={index}>{item.track.name}</li>
         ))}
       </ul>
     </div>

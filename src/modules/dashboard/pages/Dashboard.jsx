@@ -46,8 +46,13 @@ export const DashboardPage = () => {
     }
   };
 
+  
+
   return (
-    <div className="dashboard-content custom-scrollbar" style={{ height: "95vh", overflow: "auto" }}>
+    <div
+      className="dashboard-content custom-scrollbar"
+      style={{ height: "95vh", overflow: "auto" }}
+    >
       <div className="container-fluid ">
         <div className="row">
           {/* Sidebar */}
@@ -63,32 +68,36 @@ export const DashboardPage = () => {
               <hr className="border-secondary" />
 
               <div className="row row-cols-2 row-cols-sm-3 row-cols-md-1 g-3">
-                {
                 
-                playlists?.items?.map((playlist) => (
-                  <div className="col" key={playlist.id}>
-                    <div className="card bg-dark border-0 text-white">
-                      <img
-                        src={playlist.img}
-                        className="card-img-top"
-                        alt={playlist.name}
-                        style={{ height: "100px", objectFit: "cover" }}
-                      />
-                      <div className="card-body p-2">
-                        <h6
-                          className="card-title"
-                          style={{ fontSize: "0.9rem" }}
-                        >
-                          {playlist.name}
-                        </h6>
-                        <Link
-                          to={`/Detail/${playlist.id}`}
+                {playlists?.items?.map((playListMost) => (
+                  <div
+                    key={playListMost.id}
+                    className="card bg-dark text-white justify-content-center"
+                    style={{
+                      width: "280px",
+                      minWidth: "180px",
+                      margin: "10px",
+                    }}
+                  >
+                    <img
+                      src={playListMost.images?.[0]?.url}
+                      className="card-img-top"
+                      alt={playListMost.nameList}
+                      style={{ height: "280px", objectFit: "cover" }}
+                    />
+                    <div className="card-body p-5">
+                      <h6 className="card-title mb-3">{playListMost.name}</h6>
+                      <small>Seguidores: {playListMost.tracks?.total}</small>
+                      <br />
+                      
+
+                      <Link
+                          to={`/Detail/${playListMost.id}`}
                           className="btn btn-success btn-sm"
                           style={{ fontSize: "0.7rem" }}
                         >
                           Detalles
                         </Link>
-                      </div>
                     </div>
                   </div>
                 ))}
@@ -102,10 +111,7 @@ export const DashboardPage = () => {
               <h1 className="text-success">Contenido Principal</h1>
 
               <h3 className="mb-4 text-white">Las Playlist Del Momento</h3>
-              <div
-                className="d-flex gap-3 overflow-auto mb-5 custom-scrollbar"
-                 
-              >
+              <div className="d-flex gap-3 overflow-auto mb-5 custom-scrollbar">
                 {playlists?.items?.map((playListMost) => (
                   <div
                     key={playListMost.id}

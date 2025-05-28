@@ -13,3 +13,13 @@ export const getUserPlaylists = () => {
       }
     });
   };
+
+  export const getPlaylistById = async (playlistId) => {
+  const token = localStorage.getItem("token"); 
+  const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
