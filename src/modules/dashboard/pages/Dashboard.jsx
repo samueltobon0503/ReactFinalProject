@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { getUserPlaylists } from "../../../core/services/playslistTest.service";
 import { PlaylistContext } from "../../playlists/contexts/PlaylistContext";
-
+import "./Dashboard.css";
 
 export const DashboardPage = () => {
   const [checkedStates, setCheckedStates] = useState({});
@@ -16,13 +16,14 @@ export const DashboardPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user.provider || user.provider !== 'spotify') {
-      navigate('/No-spotify-auth', { replace: true });
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user.provider || user.provider !== "spotify") {
+      navigate("/No-spotify-auth", { replace: true });
     }
 
     getUserPlaylists()
-      .then(response => {
+      .then((response) => {
+        console.log("hola", response.data)
         setPlaylists(response.data);
         const firstItem = response.data.items?.[0];
         if (firstItem) {
@@ -32,7 +33,7 @@ export const DashboardPage = () => {
           console.warn("No hay items en las playlists");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching playlists:", error);
         setError("Error al obtener las playlists");
       });
@@ -43,95 +44,114 @@ export const DashboardPage = () => {
     try {
       const savedPlaylists = await getPlaylists();
       setAllUserPlaylists(savedPlaylists);
+      console.log("Playlists guardadas en Firestore:", savedPlaylists);
+      
     } catch (error) {
       console.error("Error al obtener playlists guardadas:", error);
     }
   };
 
   return (
-    <div className="dashboard-content">
-      <div style={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
-        <div
-          className="Sidebar"
-          style={{
-            width: "270px",
-            backgroundColor: "#212121",
-            padding: "1rem",
-            overflowY: "auto",
-          }}
-        >
-          <h5 style={{ color: "#1DB954" }}>¡Bienvenido a tu espacio!</h5>
-          <hr style={{ borderColor: "gray" }} />
+    <div
+      className="dashboard-content custom-scrollbar"
+      style={{ height: "95vh", overflow: "auto" }}
+    >
+      <div className="container-fluid ">
+        <div className="row">
+          {/* Sidebar */}
+          <div className="col-12 col-md-2 mb-4 mb-md-0 custom-scrollbar">
+            <div
+              className="bg-dark text-white p-3 h-100"
+              style={{ minHeight: "100vh" }}
+            >
+              <h5 className="text-success">¡Bienvenido a tu espacio!</h5>
+              <hr className="border-secondary" />
 
-          <h6 style={{ color: "white" }}>Tus Playlists</h6>
+              <h6>Tus Playlists</h6>
+              <hr className="border-secondary" />
 
-          <hr style={{ borderColor: "gray" }} />
+              <div className="row row-cols-2 row-cols-sm-3 row-cols-md-1 g-3">
+                
+                {playlists?.items?.map((playListMost) => (
+                  <div
+                    key={playListMost.id}
+                    className="card bg-dark text-white justify-content-center"
+                    style={{
+                      width: "280px",
+                      minWidth: "180px",
+                      margin: "10px",
+                    }}
+                  >
+                    <img
+                      src={playListMost.images?.[0]?.url}
+                      className="card-img-top"
+                      alt={playListMost.nameList}
+                      style={{ height: "280px", objectFit: "cover" }}
+                    />
+                    <div className="card-body p-5">
+                      <h6 className="card-title mb-3">{playListMost.name}</h6>
+                      <small>Seguidores: {playListMost.tracks?.total}</small>
+                      <br />
+                      
 
-          <div
-            className="row g-4 mb-5"
-            style={{ display: "flex", overflowX: "auto" }}
-          >
-            {[
-              {
-                id: "chill-vibes",
-                name: "Chill Vibes",
-                img: "https://picsum.photos/140",
-              },
-              {
-                id: "workout-hits",
-                name: "Workout Hits",
-                img: "https://picsum.photos/140",
-              },
-              {
-                id: "roadtrip-tunes",
-                name: "Roadtrip Tunes",
-                img: "https://picsum.photos/140",
-              },
-            ].map((playlist) => (
-              <div className="col-auto" key={playlist.id}>
-                <div
-                  className="card bg-dark border-0 text-white"
-                  style={{ width: "130px" }}
-                >
-                  <img
-                    src={playlist.img}
-                    className="card-img-top"
-                    alt={playlist.name}
-                    style={{ height: "100px", objectFit: "cover" }}
-                  />
-                  <div className="card-body" style={{ padding: "0.5rem" }}>
-                    <h6 className="card-title" style={{ fontSize: "0.9rem" }}>
-                      {playlist.name}
-                    </h6>
-                    <Link
-                      to={`/Detail/${playlist.id}`}
-                      className="btn btn-success btn-sm"
-                      style={{ fontSize: "0.7rem" }}
-                    >
-                      Detalles
-                    </Link>
+                      <Link
+                          to={`/Detail/${playListMost.id}`}
+                          className="btn btn-success btn-sm"
+                          style={{ fontSize: "0.7rem" }}
+                        >
+                          Detalles
+                        </Link>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
 
-        <div className="Board-Principal" style={{ flex: 1, padding: "2rem" }}>
-          <h1 style={{ color: "#1DB954" }}>Contenido Principal</h1>
+          {/* Contenido principal */}
+          <div className="col-12 col-md-9">
+            <div className="p-3">
+              <h1 className="text-success">Contenido Principal</h1>
 
-          <h3 className="mb-4" style={{ color: "white" }}>
-            Las Playlist Del Momento
-          </h3>
-          <div
-            style={{ display: "flex", gap: "1rem", overflowX: "auto" }}
-            className="mb-5"
-          >
-            {playlists?.items?.map((playListMost) => (
+              <h3 className="mb-4 text-white">Las Playlist Del Momento</h3>
+              <div className="d-flex gap-3 overflow-auto mb-5 custom-scrollbar">
+                {playlists?.items?.map((playListMost) => (
+                  <div
+                    key={playListMost.id}
+                    className="card bg-dark text-white flex-shrink-0"
+                    style={{ width: "250px" }}
+                  >
+                    <img
+                      src={playListMost.images?.[0]?.url}
+                      className="card-img-top"
+                      alt={playListMost.nameList}
+                      style={{ height: "200px", objectFit: "cover" }}
+                    />
+                    <div className="card-body p-3">
+                      <h6 className="card-title">{playListMost.name}</h6>
+                      <small>Seguidores: {playListMost.tracks?.total}</small>
+                      <ToggleButton
+                        onLabel="Agregar"
+                        offLabel="Eliminar"
+                        onIcon="pi pi-check"
+                        offIcon="pi pi-times"
+                        checked={checkedStates[playListMost.id] || false}
+                        onChange={(e) =>
+                          setCheckedStates((prev) => ({
+                            ...prev,
+                            [playListMost.id]: e.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <h3 className="mb-4 text-success">Creemos que te puede gustar</h3>
               <div
-                key={playListMost.id}
-                className="card bg-dark text-white"
-                style={{ width: "280px", minWidth: "180px" }}
+                className="d-flex gap-3 overflow-auto mb-5 custom-scrollbar"
+                style={{ paddingBottom: "0.7rem" }}
               >
                 <img
                   src={playListMost.images?.[0]?.url}
@@ -220,7 +240,6 @@ export const DashboardPage = () => {
                 );
               })}
             </div>
-
           </div>
         </div>
       </div>
