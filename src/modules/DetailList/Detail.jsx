@@ -13,29 +13,30 @@ export const DetailList = () => {
 
   const token = JSON.parse(localStorage.getItem("token"));
 
-  useEffect(() => {
-    const fetchPlaylist = async () => {
-      try {
-        const response = await getPlaylistById(id);
-        setPlaylist(response.data);
-        console.log("Datos de la playlist:", response.data);
+ useEffect(() => {
+  const fetchPlaylist = async () => {
+    try {
+      const response = await getPlaylistById(id);
+      console.log("Respuesta completa de la playlist:", response);
+      setPlaylist(response);
+    } catch (err) {
+      console.error("Error cargando playlist:", err);
+      setError("No se pudo cargar la playlist");
+     
 
-      } catch (err) {
-        console.error("Error cargando playlist:", err);
-        setError("No se pudo cargar la playlist");
-      } finally {
-        setLoading(false);
-      }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPlaylist();
-  }, [id]);
+  fetchPlaylist();
+}, [id]);
 
   if (loading) return <p className="text-white p-5">Cargando detalles...</p>;
   if (error || !playlist) return <p className="text-white p-5">{error}</p>;
   
   return (
-    <div className="container py-5 text-white">
+    <div className="container py-5 text-white custom-scrollbar " style={{ height: "95vh", overflow: "auto" }}>
       <button
         onClick={() => navigate("/Dashboard")}
         className="btn btn-outline-light mb-4"

@@ -16,6 +16,8 @@ export const getUserPlaylists = () => {
 
 export const getPlaylistById = async (playlistId) => {
   const token = getHeaders();
+  console.log(token);
+
   const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
