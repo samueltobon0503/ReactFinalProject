@@ -18,6 +18,7 @@ export const DetailList = () => {
       try {
         const response = await getPlaylistById(id);
         setPlaylist(response.data);
+        console.error("Respuesta:", response);
       } catch (err) {
         console.error("Error cargando playlist:", err);
         setError("No se pudo cargar la playlist");

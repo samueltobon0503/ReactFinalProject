@@ -22,6 +22,7 @@ export const DashboardPage = () => {
 
     getUserPlaylists()
       .then((response) => {
+        console.log("hola", response.data)
         setPlaylists(response.data);
         const firstItem = response.data.items?.[0];
         if (firstItem) {
