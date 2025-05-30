@@ -28,12 +28,12 @@ export const DashboardPage = () => {
       try {
         const savedPlaylists = await getPlaylists();
         setAllUserPlaylists(savedPlaylists);
-        console.log("Playlists guardadas en Firestore:", savedPlaylists);
+        // console.log("Playlists guardadas en Firestore:", savedPlaylists);
 
         const savedPlaylistIds = new Set(savedPlaylists.map(p => p.id));
 
         const response = await getUserPlaylists();
-        console.log("Playlists de Spotify:", response.data);
+        // console.log("Playlists de Spotify:", response.data);
         setPlaylists(response.data);
 
         const spotifyPlaylists = response.data.items;
@@ -45,7 +45,7 @@ export const DashboardPage = () => {
               console.log("Guardando nueva playlist:", spotifyPlaylist);
               await savePlaylist(spotifyPlaylist);
             } else {
-              console.log("La playlist ya existe, no se guarda:", spotifyPlaylist.name);
+              // console.log("La playlist ya existe, no se guarda:", spotifyPlaylist.name);
             }
           }
         } else {

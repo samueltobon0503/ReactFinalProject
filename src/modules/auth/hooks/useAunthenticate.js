@@ -108,7 +108,7 @@ export const useAuthenticate = (dispatch) => {
 
             const { data } = await getUserProfile();
 
-            console.log(data)
+            // console.log(data)
 
             if (!data.email) {
                 throw new Error('No se pudo obtener el perfil del usuario');

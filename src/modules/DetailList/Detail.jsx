@@ -23,7 +23,7 @@ export const DetailList = () => {
     const fetchPlaylist = async () => {
       try {
         const response = await getPlaylistById(id);
-        console.log("Respuesta completa de la playlist:", response);
+        // console.log("Respuesta completa de la playlist:", response);
         setPlaylist(response);
       } catch (err) {
         console.error("Error cargando playlist:", err);
