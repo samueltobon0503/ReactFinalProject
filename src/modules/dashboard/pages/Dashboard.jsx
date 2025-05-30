@@ -9,6 +9,7 @@ import { PlaylistContext } from "../../playlists/contexts/PlaylistContext";
 export const DashboardPage = () => {
   const [checkedStates, setCheckedStates] = useState({});
   const { savePlaylist, getPlaylists } = useContext(PlaylistContext);
+  const [allUserPlaylists, setAllUserPlaylists] = useState([]);
 
   const [playlists, setPlaylists] = useState([]);
   const [error, setError] = useState(null);
@@ -35,17 +36,17 @@ export const DashboardPage = () => {
         console.error("Error fetching playlists:", error);
         setError("Error al obtener las playlists");
       });
-        // mostrarPlaylistsGuardadas();
+    mostrarPlaylistsGuardadas();
   }, []);
 
-const mostrarPlaylistsGuardadas = async () => {
-  try {
-    const savedPlaylists = await getPlaylists();
-    console.log("Playlists guardadas en Firestore:", savedPlaylists);
-  } catch (error) {
-    console.error("Error al obtener playlists guardadas:", error);
-  }
-};
+  const mostrarPlaylistsGuardadas = async () => {
+    try {
+      const savedPlaylists = await getPlaylists();
+      setAllUserPlaylists(savedPlaylists);
+    } catch (error) {
+      console.error("Error al obtener playlists guardadas:", error);
+    }
+  };
 
   return (
     <div className="dashboard-content">
@@ -163,70 +164,63 @@ const mostrarPlaylistsGuardadas = async () => {
             <h3 className="mb-4" style={{ color: "#1DB954" }}>
               Creemos que te puede gustar
             </h3>
+            <h3 className="mb-4" style={{ color: "#1DB954" }}>
+              Creemos que te puede gustar
+            </h3>
             <div className="d-flex flex-wrap gap-4">
-              {[
-                {
-                  name: "Mood Booster",
-                  description: "Canciones alegres para levantar el ánimo",
-                  followers: "1.2M",
-                  img: "https://img.freepik.com/foto-gratis/viajero-vista-trasera-disfrutando-bonita-vista_23-2149121501.jpg?ga=GA1.1.1799899732.1746798904&semt=ais_hybrid&w=740",
-                },
-                {
-                  name: "Lo Mejor del 2024",
-                  description: "Hits que marcaron el año",
-                  followers: "980K",
-                  img: "https://img.freepik.com/fotos-premium/carretera-asfalto-texto-2024-al-horizonte-sol-horizonte-camino-adelante-avanzando-concepto-nuevo-ano-perspectivas-claras-positivas-delante-manana-temprana-otono_334782-7970.jpg?ga=GA1.1.1799899732.1746798904&semt=ais_hybrid&w=740",
-                },
-                {
-                  name: "Café y Chill",
-                  description: "Lo-fi y jazz para relajarte",
-                  followers: "760K",
-                  img: "https://img.freepik.com/foto-gratis/mujer-pelo-oscuro-relajado-vistiendo-camiseta-blanca-estilo-casual-posando-al-aire-libre-taza-te-o-cafe-caliente_176532-14579.jpg?ga=GA1.1.1799899732.1746798904&semt=ais_hybrid&w=740",
-                },
-              ].map((playlist, idx) => (
-                <div
-                  className="card bg-dark text-white"
-                  style={{ width: "274px", minWidth: "180px" }}
-                >
-                  <img
-                    src={playlist.img}
-                    className="card-img-top"
-                    alt={playlist.name}
-                    style={{ height: "280px", objectFit: "cover" }}
-                  />
+              {allUserPlaylists.map((playlist) => {
+                const imageUrl = playlist.images?.[0]?.url || '/fallback.jpg';
+                return (
                   <div
-                    className="card-body d-flex flex-column justify-content-between p-4"
-                    style={{ height: "280px" }}
+                    key={playlist.id}
+                    className="card bg-dark text-white"
+                    style={{ width: "274px", minWidth: "180px" }}
                   >
-                    <div>
-                      <h6 className="card-title">{playlist.name}</h6>
-                      <p className="card-text">{playlist.description}</p>
-                      <small className="d-block mb-3">
-                        Seguidores: {playlist.followers}
-                      </small>
-                    </div>
-                    <ToggleButton
-                      className={
-                        checkedStates[playlist.name]
-                          ? "toggle-on"
-                          : "toggle-off"
-                      }
-                      onLabel="Fav"
-                      offLabel="Fav"
-                      onIcon="pi pi-heart-fill"
-                      offIcon="pi pi-heart"
-                      checked={checkedStates[playlist.name] || false}
-                      onChange={(e) =>
-                        setCheckedStates((prev) => ({
-                          ...prev,
-                          [playlist.name]: e.value,
-                        }))
-                      }
+                    <img
+                      src={imageUrl}
+                      className="card-img-top"
+                      alt={playlist.name}
+                      style={{ height: "280px", objectFit: "cover" }}
                     />
+                    <div
+                      className="card-body d-flex flex-column justify-content-between p-4"
+                      style={{ height: "280px" }}
+                    >
+                      <div>
+                        <h6 className="card-title">{playlist.name}</h6>
+                        <p className="card-text">
+                          {playlist.description || "Sin descripción"}
+                        </p>
+                        <small className="d-block mb-3">
+                          Seguidores: {playlist.tracks?.total ?? "—"}
+                        </small>
+                      </div>
+                      <ToggleButton
+                        className={
+                          checkedStates[playlist.id] ? "toggle-on" : "toggle-off"
+                        }
+                        onLabel="Fav"
+                        offLabel="Fav"
+                        onIcon="pi pi-heart-fill"
+                        offIcon="pi pi-heart"
+                        checked={!!checkedStates[playlist.id]}
+                        onChange={(e) => {
+                          const isFav = e.value;
+                          setCheckedStates((prev) => ({
+                            ...prev,
+                            [playlist.id]: isFav,
+                          }));
+                          if (isFav) {
+                            savePlaylist(playlist);
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { doc, collection, setDoc, query, getDocs } from "firebase/firestore/lite"
+import { doc, collection, setDoc, query, getDocs, collectionGroup } from "firebase/firestore/lite"
 import { FirebaseDB } from "../../../firebase/config"
 import { playlistTypes } from "../types/playlistTypes";
 import { data } from "react-router";
@@ -9,19 +9,24 @@ const userL = JSON.parse(userStr);
 export const usePlaylist = (user, dispatch) => {
 
     const getPlaylists = async () => {
-        const playlists = collection(FirebaseDB, `${userL.email}/Spotify-Consumer/playlists`)
-
-        const q = query(playlists)
+        const playlistsGroup = collectionGroup(FirebaseDB, 'playlists')
+        const q = query(playlistsGroup)
         const querySnapshot = await getDocs(q)
-        const result = querySnapshot.docs.map((doc) => {
-            return {id: doc.id, ...doc.data()}
+        const result = querySnapshot.docs.map(doc => {
+
+            const userEmail = doc.ref.parent.parent?.id || 'unknown'
+            return {
+                id: doc.id,
+                user: userEmail,
+                ...doc.data()
+            }
         })
         return result;
     }
 
     const savePlaylist = async (playlist) => {
         try {
-            const newDoc = doc(collection(FirebaseDB, 
+            const newDoc = doc(collection(FirebaseDB,
                 `Playlists/${userL.email}/playlists`));
             console.log(newDoc, userL.email);
 
