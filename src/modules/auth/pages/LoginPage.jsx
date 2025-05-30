@@ -20,7 +20,7 @@ export const Loginpage = () => {
   const onLoginUser = async (_target) => {
     const isLogged = await login({ email, password });
 
-    console.log("Is loggged", isLogged);
+    // console.log("Is loggged", isLogged);
 
     if (!isLogged) {
       setError(true);
@@ -32,7 +32,7 @@ export const Loginpage = () => {
   const onRegisterUser = async (_target) => {
     const isLogged = await login({ email, password });
 
-    console.log("Is loggged", isLogged);
+    // console.log("Is loggged", isLogged);
 
     navigate('/Register', { replace: true });
   };

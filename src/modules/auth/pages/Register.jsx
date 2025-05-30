@@ -19,7 +19,7 @@ const Register = () => {
 
     const onRegisterUser = async (_target) => {
         const isRegister = await registerEmail({ email, password });
-        console.log("is Register", isRegister);
+        // console.log("is Register", isRegister);
 
         if (!isRegister) {
             setError(true);

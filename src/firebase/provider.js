@@ -7,7 +7,7 @@ export const loginUser = async (email, password) => {
     try {
 
         const result = await signInWithEmailAndPassword(FirebaseAuth, email, password)
-        console.log(result)
+        // console.log(result)
 
         const { uid, photoURL, displayName } = result.user;
 
@@ -32,7 +32,7 @@ export const loginWithGoogle = async () => {
     try {
 
         const result = await signInWithPopup(FirebaseAuth, GoogleProvider)
-        console.log("Usuario de google", result)
+        // console.log("Usuario de google", result)
 
         const { uid, photoURL, displayName, email } = result.user;
 
@@ -58,7 +58,7 @@ export const registerWithEmail = async (email, password) =>{
 
         const userCredential = await createUserWithEmailAndPassword (FirebaseAuth,email, password)
         const user = userCredential.user;
-        console.log('Esta registrado:',userCredential.user)
+        // console.log('Esta registrado:',userCredential.user)
 
         const displayName = email.split('@')[0];
 

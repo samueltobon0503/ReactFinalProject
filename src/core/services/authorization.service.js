@@ -10,7 +10,7 @@ export const redirectToSpotifyLogin = () => {
   const state = generateRandomString(16)
   localStorage.setItem('spotify_auth_state', state);
 
-  console.log(redirectUri)
+  // console.log(redirectUri)
 
 
   const authUrl = `${process.env.REACT_APP_SPOTIFY_ACCOUNT_URL}/authorize?` +
@@ -22,7 +22,7 @@ export const redirectToSpotifyLogin = () => {
       state: state
     });
 
-  console.log(authUrl)
+  // console.log(authUrl)
 
   window.location.href = authUrl;
 };

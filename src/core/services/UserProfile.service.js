@@ -22,3 +22,13 @@ export const getUserArtists = () => {
       }
     });
   };
+
+export const getUserTracks = () => {
+    const token = getHeaders();
+    console.log(token)
+    return axios.get(`${BASE_URL}/me/tracks`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+  };

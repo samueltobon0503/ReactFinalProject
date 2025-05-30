@@ -28,11 +28,11 @@ export const usePlaylist = (user, dispatch) => {
         try {
             const newDoc = doc(collection(FirebaseDB,
                 `Playlists/${userL.email}/playlists`));
-            console.log(newDoc, userL.email);
+            // console.log(newDoc, userL.email);
 
             await setDoc(newDoc, playlist)
 
-            console.log("Lo que se guardo", newDoc)
+            // console.log("Lo que se guardo", newDoc)
 
             playlist.id = newDoc.id;
 

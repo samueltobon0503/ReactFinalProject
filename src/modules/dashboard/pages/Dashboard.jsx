@@ -10,6 +10,8 @@ export const DashboardPage = () => {
   const [checkedStates, setCheckedStates] = useState({});
   const { savePlaylist, getPlaylists } = useContext(PlaylistContext);
   const [allUserPlaylists, setAllUserPlaylists] = useState([]);
+  const [user, setUser] = useState([]);
+
 
   const [playlists, setPlaylists] = useState([]);
   const [error, setError] = useState(null);
@@ -26,12 +28,12 @@ export const DashboardPage = () => {
       try {
         const savedPlaylists = await getPlaylists();
         setAllUserPlaylists(savedPlaylists);
-        console.log("Playlists guardadas en Firestore:", savedPlaylists);
+        // console.log("Playlists guardadas en Firestore:", savedPlaylists);
 
         const savedPlaylistIds = new Set(savedPlaylists.map(p => p.id));
 
         const response = await getUserPlaylists();
-        console.log("Playlists de Spotify:", response.data);
+        // console.log("Playlists de Spotify:", response.data);
         setPlaylists(response.data);
 
         const spotifyPlaylists = response.data.items;
@@ -43,7 +45,7 @@ export const DashboardPage = () => {
               console.log("Guardando nueva playlist:", spotifyPlaylist);
               await savePlaylist(spotifyPlaylist);
             } else {
-              console.log("La playlist ya existe, no se guarda:", spotifyPlaylist.name);
+              // console.log("La playlist ya existe, no se guarda:", spotifyPlaylist.name);
             }
           }
         } else {
@@ -64,7 +66,7 @@ return (
       <div className="row">
         <div className="col-12 col-md-2 mb-4 mb-md-0 custom-scrollbar">
           <div className="bg-dark text-white p-3 h-100" style={{ minHeight: "100vh" }}>
-            <h5 className="text-success">¡Bienvenido a tu espacio!</h5>
+            <h5 className="text-success " >¡Bienvenido a tu espacio!</h5>
             <hr className="border-secondary" />
             <h6>Tus Playlists</h6>
             <hr className="border-secondary" />
@@ -88,12 +90,12 @@ return (
                   />
                   <div className="card-body p-5">
                     <h6 className="card-title mb-3">{playListMost.name}</h6>
-                    <small>Seguidores: {playListMost.tracks?.total}</small>
+                    <small>Canciones: {playListMost.tracks?.total}</small>
                     <br />
                     <Link
                       to={`/Detail/${playListMost.id}`}
                       className="btn btn-success btn-sm"
-                      style={{ fontSize: "0.7rem" }}
+                      style={{ fontSize: "1.2rem" }}
                     >
                       Detalles
                     </Link>
@@ -106,8 +108,9 @@ return (
 
         <div className="col-12 col-md-9">
           <div className="p-3">
-            <h1 className="text-success">Contenido Principal</h1>
-            <h3 className="mb-4 text-white">Las Playlist Del Momento</h3>
+            <h1 className="text-success">¡ESTAS SON </h1>
+            <h1 className="mb-1">{user.data?.display_name}</h1>
+            <h1 className="mb-4 text-white">TUS FAVORITAS!</h1>
 
             <div className="d-flex gap-3 overflow-auto mb-5 custom-scrollbar">
               {playlists?.items?.map((playListMost) => (
@@ -124,8 +127,8 @@ return (
                   />
                   <div className="card-body p-3">
                     <h6 className="card-title">{playListMost.name}</h6>
-                    <small>Seguidores: {playListMost.tracks?.total}</small>
-                    <ToggleButton
+                    <small>Canciones: {playListMost.tracks?.total}</small>
+                    {/* <ToggleButton
                       onLabel="Agregar"
                       offLabel="Eliminar"
                       onIcon="pi pi-check"
@@ -137,7 +140,7 @@ return (
                           [playListMost.id]: e.value,
                         }))
                       }
-                    />
+                    /> */}
                   </div>
                 </div>
               ))}
@@ -173,10 +176,17 @@ return (
                             {playlist.description || "Sin descripción"}
                           </p>
                           <small className="d-block mb-3">
-                            Seguidores: {playlist.tracks?.total ?? "—"}
+                            Canciones: {playlist.tracks?.total ?? "—"}
                           </small>
                         </div>
-                        <ToggleButton
+                        <Link
+                      to={`/Detail/${playlist.id}`}
+                      className="btn btn-success btn-sm"
+                      style={{ fontSize: "1.2rem" }}
+                    >
+                      Ver más
+                    </Link>
+                        {/* <ToggleButton
                           className={
                             checkedStates[playlist.id] ? "toggle-on" : "toggle-off"
                           }
@@ -195,7 +205,7 @@ return (
                               savePlaylist(playlist);
                             }
                           }}
-                        />
+                        /> */}
                       </div>
                     </div>
                   );
