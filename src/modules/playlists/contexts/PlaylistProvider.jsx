@@ -15,7 +15,6 @@ const init = () => {
   }
 }
 
-
 export const PlaylistProvider = ({ children }) => {
   const [playListState, dispatch] = useReducer(playListReducer, initialState, init);
 
