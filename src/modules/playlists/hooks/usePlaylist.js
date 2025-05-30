@@ -21,12 +21,13 @@ export const usePlaylist = (user, dispatch) => {
 
     const savePlaylist = async (playlist) => {
         try {
-
-
-            const newDoc = doc(collection(FirebaseDB, `${userL.email}/Spotify-Consumer/playlists`));
+            const newDoc = doc(collection(FirebaseDB, 
+                `Playlists/${userL.email}/playlists`));
             console.log(newDoc, userL.email);
 
             await setDoc(newDoc, playlist)
+
+            console.log("Lo que se guardo", newDoc)
 
             playlist.id = newDoc.id;
 

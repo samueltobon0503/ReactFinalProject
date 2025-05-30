@@ -25,6 +25,7 @@ export const DashboardPage = () => {
         setPlaylists(response.data);
         const firstItem = response.data.items?.[0];
         if (firstItem) {
+          console.log("Guardando", firstItem)
           savePlaylist(firstItem);
         } else {
           console.warn("No hay items en las playlists");
@@ -34,7 +35,7 @@ export const DashboardPage = () => {
         console.error("Error fetching playlists:", error);
         setError("Error al obtener las playlists");
       });
-        mostrarPlaylistsGuardadas();
+        // mostrarPlaylistsGuardadas();
   }, []);
 
 const mostrarPlaylistsGuardadas = async () => {
