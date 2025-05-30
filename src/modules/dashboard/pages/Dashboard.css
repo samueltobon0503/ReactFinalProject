@@ -4,6 +4,8 @@
   color: #fff !important;
 }
 
+
+
 .p-togglebutton.p-highlight {
   background-color: #fd0000 !important;
   border: 2px solid #fff !important;
@@ -12,4 +14,34 @@
 
 .p-togglebutton {
   transition: all 0.3s ease;
+}
+
+
+/* Estilos de scrollbar para Chrome, Edge y Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #1DB954;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Estilos de scrollbar para Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1DB954 transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* evitar scroll por defecto */
 }
